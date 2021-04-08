@@ -22,10 +22,8 @@
         <hr style="margin-left: -20%; width: 100%;">
         <p style="margin-left: 12%;">CHOOSE ONE OF THE FOLLOWING</p>
 
-        <!--Hidding the audio controls, while the sound will be played as the website has been launched
-        <audio controls autoplay id="audio" style="display:none;">
-          <source src="Audio\Audio.mp3" type="audio/mpeg">
-        </audio>-->
+        <!--Hidding the audio controls, while the sound will be played as the website has been launched-->
+        
 
       </h3>
       <audio controls autoplay id="audio" style="display:none;">
@@ -75,7 +73,7 @@
         inputSpeech.text = 'How may I assist you';
       }
 
-      if (response.includes('contact')) {
+      if (response.includes('contact') || response.includes('person') ) {
         window.open('https://www.mdx.ac.uk/get-in-touch/contact-details');
         inputSpeech.text = 'Opening Contact';
       }
