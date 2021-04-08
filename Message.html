@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Library Assistance System</title>
+    <!--CSS -->
+    <link
+        href="CSS\MessageCSS.css"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    <div class="chatbox">
+        <a class="menu" href="index.html">Home</a>
+        <a class="menu" href="Support.html">Help</a>
+        <hr>
+        <h1>Library Assistance System</h1>
+        <em class="heading">Attending to our students is our priority.</em>
+
+        <div id="logs">
+
+            <div class="msg-boxSystem">
+                <p class="message">How may I assist you?</p>
+            </div>
+        </div>
+
+        <div id="form">
+            <textarea placeholder="Type Message" style="font-size: 20px; font-style:italic;" id="inputText"></textarea>
+            <button id="btn-send" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                    fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+                    <path
+                        d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z" />
+                </svg>
+            </button>
+        </div>
+
+        <ul>
+            <li><button class="btn-audio"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                        fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+                        <path fill-rule="evenodd"
+                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                    </svg></button></li>
+            <li><em class="text">Kindly press on the button to interact with system</em></li>
+        </ul>
+
+    </div>
+    <script>
+    
+        var btnSubmit = document.getElementById("btn-send");
+
+        btnSubmit.addEventListener('click', function (event) {
+                const input = document.getElementById("inputText").value;
+                var element = document.getElementById("logs");
+                element.appendChild(addUserText(input));
+                systemVoice(input);
+                document.getElementById("inputText").value="";
+                
+            });
+
+        const btnAudio = document.querySelector(".btn-audio");
+        const usrMsg = document.querySelector(".message");
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recorder = new SpeechRecognition();
+        let bookSearch=false;
+
+        function addUserText(text) {
+
+            //Create div element with a class
+            const container = document.createElement("div");
+            container.classList.add("msg-boxMe");
+
+            //Create p element with a class
+            const chat = document.createElement("p");
+            chat.classList.add("message");
+
+            //Create and add text to the p element
+            const txt = document.createTextNode(text);
+            chat.appendChild(txt);
+
+            //Add the p element to the div element
+            container.appendChild(chat);
+
+            //return the div element
+            return container;
+        };
+
+        function addSystemText(text) {
+            //Create div element with a class
+            const botContainer = document.createElement("div");
+            botContainer.classList.add("msg-boxSystem");
+
+            //Create p element with a class
+            const botChat = document.createElement("p");
+            botChat.classList.add("message");
+
+            //Create and add text to the p element
+            const botTxt = document.createTextNode(text);
+            botChat.appendChild(botTxt);
+
+            //Add the p element to the div element
+            botContainer.appendChild(botChat);
+
+            //return the div element
+            return botContainer;
+        }
+
+        function systemVoice(message) {
+           
+            const speech = new SpeechSynthesisUtterance();
+            speech.text = "Sorry, Could you please repeat or use the approprite keyword.";
+            message=message.toLowerCase();
+            console.log(message);
+            let hasImage=false;
+            
+
+            if (message.includes('borrowing a book') || message.includes('borrow procedure') || message.includes('book')) {
+                speech.text = "To borrow a book, you need to see if the book is available, if yes then you may proceed to the front desk for the borrowing process";
+            }
+
+            if (message.includes('java') || message.includes('java programming')) {
+                speech.text = "Yes, we do have books on Java programming. Would you like to access them from MyLibrary? (Yes/No)";
+            }
+
+            if (message.includes('yes')) {
+                speech.text = "Here is your result";
+                window.open('https://mdx.primo.exlibrisgroup.com/discovery/search?query=any,contains,Java%20programming&tab=Online_Access&search_scope=Online_Access&vid=44MUN_INST:hendon&offset=0');
+            }
+
+            if (message.includes('no') || message.includes('new')) {
+                hasImage=true;
+                speech.text = "O'Reilly is one of the top Java programming book, I hope it helps";
+            
+            }
+            if (message.includes('how does fine work') || message.includes('fine')) {
+                speech.text = ('Books which are on 2 days loan has a fine of Rs50 after due date. Books with 7 days loan has a fine of Rs Rs 75 and books of 14 days loan have a fine of Rs100. There is a fine of Rs50 suming up to the initial fine each passing day');
+            }
+
+            if (message.includes('where can i pay the fine') || message.includes('pay')) {
+                speech.text = "You may pay with the librarians at the library counter";
+            }
+
+            if (message.includes('refill my card') || message.includes('card refill')) {
+                speech.text = "Ask the librarians to fill in your student card on their system and don't forget to take your receipt!";
+            }
+
+            if (message.includes('print') || message.includes('can print in the library')) {
+                speech.text = "You should log on a computer from the library and start the printing process, then upon fetching your copy you should swipe your student card on the printer for identification and payment purposes";
+            }
+            if(bookSearch){
+                bookSearch=!bookSearch;
+                let search=message.replace(/ /g,"%20");
+                speech.text = "Opening your requested book in a new tab";
+                window.open('https://mdx.primo.exlibrisgroup.com/discovery/search?query=any,contains,'+search+'&tab=Online_Access&search_scope=Online_Access&vid=44MUN_INST:hendon&offset=0');
+            }
+            if (message.includes('find') || message.includes('search')) {
+                bookSearch=true;
+                speech.text = "Sure i can search for a book tell me the title";
+            }
+            
+
+
+            speech.volume = 1;
+            speech.rate = 1;
+            speech.pitch = 1;
+            window.speechSynthesis.speak(speech);
+            var element = document.getElementById("logs");
+            element.appendChild(addSystemText(speech.text));
+            if (hasImage){
+                var image = document.createElement("img");
+                 image.src = "Images/JavaBook.jpg";
+                 element.appendChild(image);
+            }
+        };
+        
+
+
+        recorder.onstart = () => {
+            console.log('Voice recording has started');
+        };
+
+        recorder.onresult = (event) => {
+            const resultIndex = event.resultIndex;
+            const transcript = event.results[resultIndex][0].transcript;
+
+            //The speech is added to the div element with class logs
+            var element = document.getElementById("logs");
+            element.appendChild(addUserText(transcript));
+            systemVoice(transcript);
+        };
+
+        btnAudio.addEventListener('click', () => {
+            recorder.start();
+            console.log("Voice started")
+        });
+
+        //Send user innput from text area chatbot to 
+    </script>
+
+</body>
+
+</html>

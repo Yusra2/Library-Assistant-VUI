@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Library Assistance System</title>
+  <link href="CSS\Home.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+    rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+
+  <div class="masthead d-flex">
+    <div class="container text-center my-auto">
+      <h1 class="mb-1">Library Assistance System</h1>
+      <h3 class="mb-5">
+        <em class="heading">Attending to our students is our priority.</em>
+        <hr style="margin-left: -20%; width: 100%;">
+        <p style="margin-left: 12%;">CHOOSE ONE OF THE FOLLOWING</p>
+
+        <!--Hidding the audio controls, while the sound will be played as the website has been launched
+        <audio controls autoplay id="audio" style="display:none;">
+          <source src="Audio\Audio.mp3" type="audio/mpeg">
+        </audio>-->
+
+      </h3>
+      <audio controls autoplay id="audio" style="display:none;">
+        <source src="Audio\Audio.mp3" type="audio/mpeg">
+      </audio>
+      <ul>
+        <li><a href="Message.html" id="btnBook">Question/Query</a></li>
+        <li><a href="https://www.mdx.ac.uk/get-in-touch/contact-details" id="btnContact">Contact Details</a></li>
+        <li><a href="Support.html" id="btnSupport">Help & Support</a></li>
+        <li><button id="btnaudio"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+              class="bi bi-mic-fill" viewBox="0 0 16 16">
+              <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+              <path fill-rule="evenodd"
+                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+            </svg></button></li>
+        <em class="text">Kindly press on the button to interact with system</em>
+      </ul>
+    </div>
+  </div>
+
+
+
+
+  <script>
+    var button = document.querySelector("#btnaudio");
+
+    //Speech recognition for the window browser
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const record = new SpeechRecognition();
+    record.onresult = (event) => {
+          console.log(event)
+            const resultIndex = event.resultIndex;
+            const transcript = event.results[resultIndex][0].transcript;
+
+            //The speech is added to the div element with class logs
+            system(transcript);
+        };
+
+    function system(response) {
+      console.log(response)
+      const inputSpeech = new SpeechSynthesisUtterance();
+      inputSpeech.text = 'Sorry, Could you please repeat or use the approprite keyword.';
+
+
+      if (response.includes('book') || response.includes('fine') || response.includes('procedure') || response.includes('borrow')) {
+        window.open('Message.html');
+        inputSpeech.text = 'How may I assist you';
+      }
+
+      if (response.includes('contact')) {
+        window.open('https://www.mdx.ac.uk/get-in-touch/contact-details');
+        inputSpeech.text = 'Opening Contact';
+      }
+
+      if (response.includes('help') || response.includes('support') || response.includes('how to use website')) {
+        inputSpeech.text = 'Opening help section';
+        window.open('Support.html');
+      }
+
+      inputSpeech.volume = 1;
+      inputSpeech.pitch = 1;
+      window.speechSynthesis.speak(inputSpeech);
+    }
+    record.onstart = () => {
+      console.log('voice');
+    };
+
+    //Adding an event to the button
+    button.addEventListener('click', () => {
+      record.start();
+      console.log("Voice Started");
+    });
+
+
+  </script>
+
+</body>
+
+</html>
